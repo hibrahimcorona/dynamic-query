@@ -1,6 +1,12 @@
 # Dynamic Library
 This library contains a set of functions that can be used to filter, sort enumerables.
 
+# Nagivation
+- [Usage](#usage)
+- [Filtering](#filtering)
+- [Sorting](#sorting)
+- [Pagination](#pagination)
+
 ## Usage
 This examples contemplates the usage of the library having the following 'entity'.
 ```csharp
