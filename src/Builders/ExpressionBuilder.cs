@@ -47,8 +47,8 @@ public static class ExpressionBuilder
 		{
 			ParameterExpression parameter = Expression.Parameter(typeof(T), "p");
 			System.Reflection.PropertyInfo? info = typeof(T).GetProperty(propertyName);
-			MemberExpression property = Expression.Property(parameter, info);
-			var conversion = Convert.ChangeType(value, info.PropertyType);
+			MemberExpression property = Expression.Property(parameter, info!);
+			var conversion = Convert.ChangeType(value, info!.PropertyType);
 			ConstantExpression constant = Expression.Constant(conversion, info.PropertyType);
 
 			BinaryExpression binaryExpression = filterOperator switch
