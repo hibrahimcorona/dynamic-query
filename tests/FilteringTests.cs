@@ -163,7 +163,7 @@ public class FilteringTests
 		IQueryable<TestEntity> query = TestEntity.EntityList.AsQueryable();
 		var model = new FilterModel<TestEntity>
 		{
-			Operator = FilterOperator.Or,
+			Operator = FilterOperator.And,
 			Filters =
 			[
 				new FilterModel<TestEntity>
