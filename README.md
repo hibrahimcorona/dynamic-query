@@ -5,6 +5,7 @@ This library contains a set of functions that can be used to filter, sort enumer
 - [Usage](#usage)
 - [Filtering](#filtering)
 	- [Filtering using the `FilterModel`](#filtering-using-the-filtermodel)
+ 	- [Filtering using the `Filters` list in `FilterModel`](#filtering-using-the-filters-list-in-filtermodel)`
 - [Sorting](#sorting)
 	- [Sorting using the `OrderByModel`](#sorting-using-the-orderbymodel)
 - [Pagination](#pagination)
