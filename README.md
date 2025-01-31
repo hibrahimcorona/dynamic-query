@@ -87,6 +87,46 @@ var newList = query.ToList();
 ];
 ```
 
+#### Filtering using the `Filters` list in `FilterModel`.
+You can also use the `Filters` list in the `FilterModel` to filter the list of entities. <br/>
+The `Filters` list accepts a list of `FilterModel` to filter the list of entities. <br/>
+The following example shows how to filter the list of entities to get only the ones with age greater than or equal to 50 and the name is "John".
+```csharp
+var query = EntityList.AsQueryable();
+var model = new FilterModel<TestEntity>
+		{
+			Operator = FilterOperator.And,
+			Filters =
+			[
+				new FilterModel<TestEntity>
+				{
+					Field = "Age",
+					Operator = FilterOperator.GreaterThanOrEqual,
+					Value = " 50"
+				},
+				new FilterModel<TestEntity>
+				{
+					Field = "Name",
+					Operator = FilterOperator.Equal,
+					Value = "John"
+				}
+			]
+		};
+
+query = query.ApplyFilter(model);
+
+// Apply the .ToList() to get the filtered list
+var newList = query.ToList();
+```
+
+*Returns:*
+```csharp
+[
+	new TestEntity { Id = Guid.NewGuid(), Name = "John", LastName = "Thomas", Age = 55, CreatedDateUtc = DateTime.UtcNow },
+	new TestEntity { Id = Guid.NewGuid(), Name = "John", LastName = "Moore", Age = 80, CreatedDateUtc = DateTime.UtcNow },
+];
+```
+
 ### Sorting
 Sorting can be done using the `ApplySort`. <br/>
 The following example shows how to sort the list of entities by the `Age` property in ascending order.
