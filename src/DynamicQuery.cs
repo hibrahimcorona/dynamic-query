@@ -4,7 +4,6 @@ using DynamicLibrary.Exceptions;
 using DynamicLibrary.Helpers;
 using DynamicLibrary.Models;
 using DynamicLibrary.Tests;
-using System.Linq;
 using System.Linq.Expressions;
 
 namespace DynamicLibrary;
@@ -33,13 +32,13 @@ public static class DynamicQuery
 		return source;
 	}
 
-
-	///<summary>  
-	/// Apply filter to the queryable source if parameter <paramref name="model"/> and value are not null.  
+	
+	/// <summary>  
+	/// Apply filter to the queryable source if parameter <paramref name="model"/> is not null.  
 	/// </summary>  
 	/// <param name="source">The source IQueryable to apply the filter to.</param>  
-	/// <param name="model">The filter model containing field, value, and operator. If null, no filter is applied.</param>  
-	/// <returns>The filtered IQueryable if the model and value are not null; otherwise, the original IQueryable.</returns>  
+	/// <param name="model">The filter model containing field, value, operator, and nested filters. If null, no filter is applied.</param>  
+	/// <returns>The filtered IQueryable if the model is not null; otherwise, the original IQueryable.</returns>  
 	public static IQueryable<T> ApplyFilter<T>(this IQueryable<T> source, FilterModel<T>? model)
 	{
 		if (model is null)
@@ -71,15 +70,14 @@ public static class DynamicQuery
 
 		if (model.Filters is not null && model.Filters.Count != 0)
 		{
-			var expressionList = new List<Expression>();
-			var firstModel = model.Filters.First();
-			var firstExpression = ExpressionBuilder.BuildExpression<T>(firstModel.Field, firstModel.Value, firstModel.Operator);
+			FilterModel<T> firstModel = model.Filters.First();
+			Expression<Func<T, bool>> firstExpression = ExpressionBuilder.BuildExpression<T>(firstModel.Field, firstModel.Value, firstModel.Operator);
 			Expression? combinedExpression = null;
 			// Starting from the second filter, since we need to combine the first filter with the rest of the filters.
-			for ( var i = 1; i < model.Filters.Count; i++)
+			for (var i = 1; i < model.Filters.Count; i++)
 			{
-				var innerExpression = ExpressionBuilder.BuildExpression<T>(model.Filters[i].Field, model.Filters[i].Value, model.Filters[i].Operator);
-				var fullExpression = new ParameterReplacer(firstExpression.Parameters[0]).Visit(innerExpression.Body);
+				Expression<Func<T, bool>> innerExpression = ExpressionBuilder.BuildExpression<T>(model.Filters[i].Field, model.Filters[i].Value, model.Filters[i].Operator);
+				Expression fullExpression = new ParameterReplacer(firstExpression.Parameters[0]).Visit(innerExpression.Body);
 				if (model.Operator == FilterOperator.And)
 				{
 					combinedExpression = Expression.AndAlso(firstExpression.Body, fullExpression);
@@ -89,7 +87,7 @@ public static class DynamicQuery
 					combinedExpression = Expression.OrElse(firstExpression.Body, fullExpression);
 				}
 			}
-			
+
 			if (combinedExpression is not null)
 			{
 				var lambda = Expression.Lambda<Func<T, bool>>(combinedExpression, firstExpression.Parameters[0]);
