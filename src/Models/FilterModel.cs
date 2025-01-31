@@ -25,5 +25,5 @@ public class FilterModel<T>
 	/// <summary>
 	/// Gets or sets the list of filters.
 	/// </summary>
-	public List<FilterModel<T>>? Filter { get; set; }
+	public List<FilterModel<T>>? Filters { get; set; }
 }

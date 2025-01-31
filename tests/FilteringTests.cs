@@ -155,4 +155,37 @@ public class FilteringTests
 		// Assert
 		Assert.Equal(7, newList.Count);
 	}
+
+	[Fact]
+	public void Should_Filter_Using_Filter_List()
+	{
+		// Arrange
+		IQueryable<TestEntity> query = TestEntity.EntityList.AsQueryable();
+		var model = new FilterModel<TestEntity>
+		{
+			Operator = FilterOperator.Or,
+			Filters =
+			[
+				new FilterModel<TestEntity>
+				{
+					Field = "Age",
+					Operator = FilterOperator.GreaterThanOrEqual,
+					Value = " 50"
+				},
+				new FilterModel<TestEntity>
+				{
+					Field = "Name",
+					Operator = FilterOperator.Equal,
+					Value = "John"
+				}
+			]
+		};
+
+		// Act
+		query = query.ApplyFilter<TestEntity>(model);
+		var newList = query.ToList();
+
+		// Assert
+		Assert.Equal(2, newList.Count);
+	}
 }

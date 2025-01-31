@@ -1,8 +1,10 @@
 ﻿using DynamicLibrary.Builders;
 using DynamicLibrary.Enums;
 using DynamicLibrary.Exceptions;
+using DynamicLibrary.Helpers;
 using DynamicLibrary.Models;
 using DynamicLibrary.Tests;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace DynamicLibrary;
@@ -31,7 +33,7 @@ public static class DynamicQuery
 		return source;
 	}
 
-	
+
 	///<summary>  
 	/// Apply filter to the queryable source if parameter <paramref name="model"/> and value are not null.  
 	/// </summary>  
@@ -64,6 +66,34 @@ public static class DynamicQuery
 			catch (ArgumentException)
 			{
 				throw new QueryException($"The property {model.Field} is not present in the {typeof(T).Name}");
+			}
+		}
+
+		if (model.Filters is not null && model.Filters.Count != 0)
+		{
+			var expressionList = new List<Expression>();
+			var firstModel = model.Filters.First();
+			var firstExpression = ExpressionBuilder.BuildExpression<T>(firstModel.Field, firstModel.Value, firstModel.Operator);
+			Expression? combinedExpression = null;
+			// Starting from the second filter, since we need to combine the first filter with the rest of the filters.
+			for ( var i = 1; i < model.Filters.Count; i++)
+			{
+				var innerExpression = ExpressionBuilder.BuildExpression<T>(model.Filters[i].Field, model.Filters[i].Value, model.Filters[i].Operator);
+				var fullExpression = new ParameterReplacer(firstExpression.Parameters[0]).Visit(innerExpression.Body);
+				if (model.Operator == FilterOperator.And)
+				{
+					combinedExpression = Expression.AndAlso(firstExpression.Body, fullExpression);
+				}
+				else if (model.Operator == FilterOperator.Or)
+				{
+					combinedExpression = Expression.OrElse(firstExpression.Body, fullExpression);
+				}
+			}
+			
+			if (combinedExpression is not null)
+			{
+				var lambda = Expression.Lambda<Func<T, bool>>(combinedExpression, firstExpression.Parameters[0]);
+				source = source.Where(lambda);
 			}
 		}
 		return source;
