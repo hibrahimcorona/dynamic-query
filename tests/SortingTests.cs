@@ -20,6 +20,21 @@ public class SortingTests
 	}
 
 	[Fact]
+	public void Should_Apply_Sort_To_A_String_Property()
+	{
+		// Arrange
+		IQueryable<TestEntity> query = TestEntity.EntityList.AsQueryable();
+
+		// Act
+		query = query.ApplySort(a => a.Name, Enums.SortingDirection.Ascending);
+		var newlist = query.ToList();
+		var expected = TestEntity.EntityList.OrderBy(a => a.Name).ToList();
+
+		// Assert
+		Assert.True(expected.SequenceEqual(newlist));
+	}
+
+	[Fact]
 	public void Should_Return_Asc_List_Using_String()
 	{
 		// Arrange

@@ -3,7 +3,6 @@ using DynamicLibrary.Enums;
 using DynamicLibrary.Exceptions;
 using DynamicLibrary.Models;
 using DynamicLibrary.Tests;
-using System.Linq;
 using System.Linq.Expressions;
 
 namespace DynamicLibrary;
@@ -29,6 +28,44 @@ public static class DynamicQuery
 		}
 
 		source = source.Where(expression);
+		return source;
+	}
+
+	
+	///<summary>  
+	/// Apply filter to the queryable source if parameter <paramref name="model"/> and value are not null.  
+	/// </summary>  
+	/// <param name="source">The source IQueryable to apply the filter to.</param>  
+	/// <param name="model">The filter model containing field, value, and operator. If null, no filter is applied.</param>  
+	/// <returns>The filtered IQueryable if the model and value are not null; otherwise, the original IQueryable.</returns>  
+	public static IQueryable<T> ApplyFilter<T>(this IQueryable<T> source, FilterModel<T>? model)
+	{
+		if (model is null)
+		{
+			return source;
+		}
+
+		if (!string.IsNullOrWhiteSpace(model.Field) && model.Value is not null)
+		{
+			try
+			{
+				Expression<Func<T, bool>> expression = ExpressionBuilder.BuildExpression<T>(model.Field, model.Value, model.Operator);
+				return model.Operator switch
+				{
+					FilterOperator.Equal => source.Where(expression),
+					FilterOperator.NotEqual => source.Where(expression),
+					FilterOperator.GreaterThan => source.Where(expression),
+					FilterOperator.GreaterThanOrEqual => source.Where(expression),
+					FilterOperator.LessThan => source.Where(expression),
+					FilterOperator.LessThanOrEqual => source.Where(expression),
+					_ => source
+				};
+			}
+			catch (ArgumentException)
+			{
+				throw new QueryException($"The property {model.Field} is not present in the {typeof(T).Name}");
+			}
+		}
 		return source;
 	}
 
