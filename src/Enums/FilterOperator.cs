@@ -2,6 +2,8 @@
 
 public enum FilterOperator
 {
+	And,
+	Or,
 	Equal,
 	NotEqual,
 	GreaterThan,
