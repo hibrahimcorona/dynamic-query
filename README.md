@@ -9,7 +9,7 @@ This library contains a set of functions that can be used to filter, sort enumer
 - [Sorting](#sorting)
 	- [Sorting using the `OrderByModel`](#sorting-using-the-orderbymodel)
 - [Pagination](#pagination)
-- [Using the `QueryResult` model](#using-the-queryresult)]
+- [Using the `QueryResult` model](#using-the-queryresult)
 
 ## Usage
 This examples contemplates the usage of the library having the following 'entity'.
