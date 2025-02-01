@@ -32,7 +32,6 @@ public static class DynamicQuery
 		return source;
 	}
 
-	
 	/// <summary>  
 	/// Apply filter to the queryable source if parameter <paramref name="model"/> is not null.  
 	/// </summary>  
