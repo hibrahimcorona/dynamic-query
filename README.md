@@ -5,10 +5,11 @@ This library contains a set of functions that can be used to filter, sort enumer
 - [Usage](#usage)
 - [Filtering](#filtering)
 	- [Filtering using the `FilterModel`](#filtering-using-the-filtermodel)
- 	- [Filtering using the `Filters` list in `FilterModel`](#filtering-using-the-filters-list-in-filtermodel)`
+ 	- [Filtering using the `Filters` list in `FilterModel`](#filtering-using-the-filters-list-in-filtermodel)
 - [Sorting](#sorting)
 	- [Sorting using the `OrderByModel`](#sorting-using-the-orderbymodel)
 - [Pagination](#pagination)
+- [Using the `QueryResult` model](#using-the-queryresult)]
 
 ## Usage
 This examples contemplates the usage of the library having the following 'entity'.
@@ -249,3 +250,31 @@ var paginatedList = query.ToList();
 	new TestEntity { Id = Guid.NewGuid(), Name = "John", LastName = "Wilson", Age = 18, CreatedDateUtc = DateTime.UtcNow },
 ];
 ```
+
+### Using the `QueryResult`
+The `QueryResult` model can be used to return a list and it's count of an specified collection. <br/>
+
+The following example shows how to use the `QueryResult` model to return the list of entities and it's count.
+```csharp
+var query = TestEntity.EntityList.AsQueryable();
+
+query = query.ApplyFilter<TestEntity>(a => a.Name == "John");
+query = query.ApplySort<TestEntity>(a => a.Age, SortingDirection.Descending);
+query = query.ApplyPagination<TestEntity>(new PaginationModel
+{
+	PageSize = 3
+});
+
+// Apply the .ToList() to get the filtered, sorted and paginated list
+var newList = query.ToList();
+```
+
+*Returns:*
+```csharp
+[
+	new TestEntity { Id = Guid.NewGuid(), Name = "John", LastName = "Moore", Age = 80, CreatedDateUtc = DateTime.UtcNow },
+	new TestEntity { Id = Guid.NewGuid(), Name = "John", LastName = "Thomas", Age = 55, CreatedDateUtc = DateTime.UtcNow },
+	new TestEntity { Id = Guid.NewGuid(), Name = "John", LastName = "Wilson", Age = 25, CreatedDateUtc = DateTime.UtcNow },
+];
+```
+
