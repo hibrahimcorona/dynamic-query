@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DynamicLibrary.Models;
+﻿namespace DynamicLibrary.Models;
 /// <summary>
 /// Represents a response for a query containing data and total count.
 /// </summary>
