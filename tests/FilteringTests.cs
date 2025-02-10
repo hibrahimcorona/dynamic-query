@@ -1,8 +1,8 @@
-﻿using DynamicLibrary.Enums;
-using DynamicLibrary.Models;
+﻿using AltairOps.DynamicLibrary.Enums;
+using AltairOps.DynamicLibrary.Models;
 using DynamicLibrary.Tests.Entity;
 
-namespace DynamicLibrary.Tests;
+namespace AltairOps.DynamicLibrary.Tests;
 public class FilteringTests
 {
 
@@ -41,7 +41,7 @@ public class FilteringTests
 	{
 		// Arrange
 		IQueryable<TestEntity> query = TestEntity.EntityList.AsQueryable();
-		var model = new FilterModel<TestEntity>
+		var model = new FilterModel
 		{
 			Field = "Age",
 			Operator = FilterOperator.Equal,
@@ -61,7 +61,7 @@ public class FilteringTests
 	{
 		// Arrange
 		IQueryable<TestEntity> query = TestEntity.EntityList.AsQueryable();
-		var model = new FilterModel<TestEntity>
+		var model = new FilterModel
 		{
 			Field = "Age",
 			Operator = FilterOperator.NotEqual,
@@ -81,7 +81,7 @@ public class FilteringTests
 	{
 		// Arrange
 		IQueryable<TestEntity> query = TestEntity.EntityList.AsQueryable();
-		var model = new FilterModel<TestEntity>
+		var model = new FilterModel
 		{
 			Field = "Age",
 			Operator = FilterOperator.GreaterThan,
@@ -101,7 +101,7 @@ public class FilteringTests
 	{
 		// Arrange
 		IQueryable<TestEntity> query = TestEntity.EntityList.AsQueryable();
-		var model = new FilterModel<TestEntity>
+		var model = new FilterModel
 		{
 			Field = "Age",
 			Operator = FilterOperator.GreaterThanOrEqual,
@@ -121,7 +121,7 @@ public class FilteringTests
 	{
 		// Arrange
 		IQueryable<TestEntity> query = TestEntity.EntityList.AsQueryable();
-		var model = new FilterModel<TestEntity>
+		var model = new FilterModel
 		{
 			Field = "Age",
 			Operator = FilterOperator.LessThan,
@@ -141,7 +141,7 @@ public class FilteringTests
 	{
 		// Arrange
 		IQueryable<TestEntity> query = TestEntity.EntityList.AsQueryable();
-		var model = new FilterModel<TestEntity>
+		var model = new FilterModel
 		{
 			Field = "Age",
 			Operator = FilterOperator.LessThanOrEqual,
@@ -161,18 +161,18 @@ public class FilteringTests
 	{
 		// Arrange
 		IQueryable<TestEntity> query = TestEntity.EntityList.AsQueryable();
-		var model = new FilterModel<TestEntity>
+		var model = new FilterModel
 		{
 			Operator = FilterOperator.And,
 			Filters =
 			[
-				new FilterModel<TestEntity>
+				new FilterModel
 				{
 					Field = "Age",
 					Operator = FilterOperator.GreaterThanOrEqual,
 					Value = " 50"
 				},
-				new FilterModel<TestEntity>
+				new FilterModel
 				{
 					Field = "Name",
 					Operator = FilterOperator.Equal,

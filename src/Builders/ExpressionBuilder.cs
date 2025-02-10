@@ -1,7 +1,8 @@
-﻿using DynamicLibrary.Enums;
+﻿using AltairOps.DynamicLibrary.Enums;
 using System.Linq.Expressions;
+using System.Text.Json;
 
-namespace DynamicLibrary.Builders;
+namespace AltairOps.DynamicLibrary.Builders;
 
 /// <summary>
 /// Provides methods to build expressions dynamically.
@@ -48,7 +49,17 @@ public static class ExpressionBuilder
 			ParameterExpression parameter = Expression.Parameter(typeof(T), "p");
 			System.Reflection.PropertyInfo? info = typeof(T).GetProperty(propertyName);
 			MemberExpression property = Expression.Property(parameter, info!);
-			var conversion = Convert.ChangeType(value, info!.PropertyType);
+			object? conversion = null;
+			if (IsJsonElement(value))
+			{
+				var obj = GetActualType(value);
+				conversion = ConvertType(obj, info!.PropertyType);
+			}
+			else
+			{
+				conversion = Convert.ChangeType(value, info!.PropertyType);
+			}
+
 			ConstantExpression constant = Expression.Constant(conversion, info.PropertyType);
 
 			BinaryExpression binaryExpression = filterOperator switch
@@ -69,5 +80,57 @@ public static class ExpressionBuilder
 			throw;
 		}
 	}
+
+	/// <summary>
+	/// Converts an object to a specified type.
+	/// </summary>
+	/// <param name="obj"></param>
+	/// <param name="propertyType"></param>
+	/// <returns></returns>
+	private static object? ConvertType(object? obj, Type propertyType)
+	{
+		if (obj is null)
+		{
+			return obj;
+		}
+
+		return propertyType switch
+		{
+			_ when propertyType.IsEnum => Enum.Parse(propertyType, obj.ToString(), true),
+			_ when propertyType == typeof(bool) => obj.ToString().ToLower() == "true",
+			_ => Convert.ChangeType(obj, propertyType)
+		};
+	}
+
+	/// <summary>
+	/// Gets the actual type of a JsonElement object.
+	/// </summary>
+	/// <param name="obj"></param>
+	/// <returns></returns>
+	/// <exception cref="ArgumentException"></exception>
+	private static object? GetActualType(object? obj)
+	{
+		if (obj is not System.Text.Json.JsonElement || obj is null)
+		{
+			return obj;
+		}
+
+		JsonValueKind typeOfObject = ((JsonElement)obj).ValueKind;
+		return typeOfObject switch
+		{
+			JsonValueKind.Number => ((JsonElement)obj).GetInt32(),
+			JsonValueKind.String => ((JsonElement)obj).GetString(),
+			JsonValueKind.True => ((JsonElement)obj).GetBoolean(),
+			JsonValueKind.False => ((JsonElement)obj).GetBoolean(),
+			_ => throw new ArgumentException("Invalid type.")
+		};
+	}
+
+	/// <summary>
+	/// Determines whether the specified object is a JsonElement.
+	/// </summary>
+	/// <param name="obj"></param>
+	/// <returns></returns>
+	private static bool IsJsonElement(object? obj) => obj?.GetType().Name == "JsonElement";
 }
 

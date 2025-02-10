@@ -1,11 +1,11 @@
-﻿using DynamicLibrary.Enums;
+﻿using AltairOps.DynamicLibrary.Enums;
 
-namespace DynamicLibrary.Models;
+namespace AltairOps.DynamicLibrary.Models;
 
 /// <summary>
 /// Represents a model for filtering data.
 /// </summary>
-public class FilterModel<T>
+public class FilterModel
 {
 	/// <summary>
 	/// Gets or sets the field to be filtered.
@@ -25,5 +25,5 @@ public class FilterModel<T>
 	/// <summary>
 	/// Gets or sets the list of filters.
 	/// </summary>
-	public List<FilterModel<T>>? Filters { get; set; }
+	public IEnumerable<FilterModel>? Filters { get; set; }
 }

@@ -1,12 +1,11 @@
-﻿using DynamicLibrary.Builders;
-using DynamicLibrary.Enums;
-using DynamicLibrary.Exceptions;
-using DynamicLibrary.Helpers;
-using DynamicLibrary.Models;
-using DynamicLibrary.Tests;
+﻿using AltairOps.DynamicLibrary.Builders;
+using AltairOps.DynamicLibrary.Enums;
+using AltairOps.DynamicLibrary.Exceptions;
+using AltairOps.DynamicLibrary.Helpers;
+using AltairOps.DynamicLibrary.Models;
 using System.Linq.Expressions;
 
-namespace DynamicLibrary;
+namespace AltairOps.DynamicLibrary;
 
 
 /// <summary>
@@ -38,7 +37,7 @@ public static class DynamicQuery
 	/// <param name="source">The source IQueryable to apply the filter to.</param>  
 	/// <param name="model">The filter model containing field, value, operator, and nested filters. If null, no filter is applied.</param>  
 	/// <returns>The filtered IQueryable if the model is not null; otherwise, the original IQueryable.</returns>  
-	public static IQueryable<T> ApplyFilter<T>(this IQueryable<T> source, FilterModel<T>? model)
+	public static IQueryable<T> ApplyFilter<T>(this IQueryable<T> source, FilterModel? model)
 	{
 		if (model is null)
 		{
@@ -67,15 +66,16 @@ public static class DynamicQuery
 			}
 		}
 
-		if (model.Filters is not null && model.Filters.Count != 0)
+		if (model.Filters is not null && model.Filters.Count() != 0)
 		{
-			FilterModel<T> firstModel = model.Filters.First();
+			FilterModel firstModel = model.Filters.First();
 			Expression<Func<T, bool>> firstExpression = ExpressionBuilder.BuildExpression<T>(firstModel.Field, firstModel.Value, firstModel.Operator);
 			Expression? combinedExpression = null;
 			// Starting from the second filter, since we need to combine the first filter with the rest of the filters.
-			for (var i = 1; i < model.Filters.Count; i++)
+			//for (var i = 1; i < model.Filters.Count(); i++)
+			foreach (var m in model.Filters)
 			{
-				Expression<Func<T, bool>> innerExpression = ExpressionBuilder.BuildExpression<T>(model.Filters[i].Field, model.Filters[i].Value, model.Filters[i].Operator);
+				Expression<Func<T, bool>> innerExpression = ExpressionBuilder.BuildExpression<T>(m.Field, m.Value, m.Operator);
 				Expression fullExpression = new ParameterReplacer(firstExpression.Parameters[0]).Visit(innerExpression.Body);
 				if (model.Operator == FilterOperator.And)
 				{

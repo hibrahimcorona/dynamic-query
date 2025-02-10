@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace DynamicLibrary.Helpers;
+namespace AltairOps.DynamicLibrary.Helpers;
 internal class ParameterReplacer : ExpressionVisitor
 {
 	private readonly ParameterExpression _parameter;

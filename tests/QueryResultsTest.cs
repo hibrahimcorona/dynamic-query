@@ -1,8 +1,8 @@
-﻿using DynamicLibrary.Enums;
-using DynamicLibrary.Models;
+﻿using AltairOps.DynamicLibrary.Enums;
+using AltairOps.DynamicLibrary.Models;
 using DynamicLibrary.Tests.Entity;
 
-namespace DynamicLibrary.Tests;
+namespace AltairOps.DynamicLibrary.Tests;
 public class QueryResultsTest
 {
 	[Fact]
@@ -54,5 +54,26 @@ public class QueryResultsTest
 		Assert.True(newList.All(a => a.Name == "John"));
 		Assert.Equal(80, newList.First().Age);
 		Assert.Equal(25, newList.Last().Age);
+	}
+
+	[Fact]
+	public void Should_Return_One_When_Using_Filter_Model()
+	{
+		// Arrange
+		IQueryable<TestEntity> query = TestEntity.EntityList.AsQueryable();
+		var filter = new FilterModel
+		{
+			Field = "Name",
+			Operator = FilterOperator.Equal,
+			Value = "Emily"
+		};
+
+		// Act
+		query = query.ApplyFilter<TestEntity>(filter);
+		var newList = query.ToList();
+
+		// Assert
+		Assert.Equal(1, newList.Count);
+		Assert.True(newList.All(a => a.Name == "Emily"));
 	}
 }

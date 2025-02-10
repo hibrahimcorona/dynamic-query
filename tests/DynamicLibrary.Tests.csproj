@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\DynamicLibrary.csproj" />
+    <ProjectReference Include="..\src\AltairOps.DynamicLibrary.csproj" />
   </ItemGroup>
 
   <ItemGroup>

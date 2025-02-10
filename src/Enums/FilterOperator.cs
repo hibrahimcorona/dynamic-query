@@ -1,4 +1,4 @@
-﻿namespace DynamicLibrary.Enums;
+﻿namespace AltairOps.DynamicLibrary.Enums;
 
 public enum FilterOperator
 {

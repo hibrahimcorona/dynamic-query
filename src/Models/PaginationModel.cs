@@ -1,4 +1,4 @@
-﻿namespace DynamicLibrary.Tests;
+﻿namespace AltairOps.DynamicLibrary.Models;
 
 /// <summary>
 /// Represents a model for pagination with page number and page size.

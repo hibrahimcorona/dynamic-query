@@ -1,6 +1,7 @@
-﻿using DynamicLibrary.Tests.Entity;
+﻿using AltairOps.DynamicLibrary.Models;
+using DynamicLibrary.Tests.Entity;
 
-namespace DynamicLibrary.Tests;
+namespace AltairOps.DynamicLibrary.Tests;
 public class PaginationTests
 {
 	[Fact]

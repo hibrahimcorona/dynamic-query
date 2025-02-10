@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>$(MSBuildProjectName)</AssemblyName>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageVersion>1.0.6</PackageVersion>
+    <Authors>Hibrahim Corona</Authors>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="../README.md" Pack="true" PackagePath="" />
+  </ItemGroup>
+  
+  <PropertyGroup>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Company>$(Authors)</Company>
+    <Description>A dynamic LINQ extension library to filter, order and sort entities using the IQueryable&lt;T&gt; interface. For more info see: https://www.nuget.org/packages/AltairOps.DynamicLibrary/</Description>
+    <Copyright>Hibrahim Corona</Copyright>
+    <PackageProjectUrl>https://github.com/hibrahimcorona/dynamic-query</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/hibrahimcorona/dynamic-query</RepositoryUrl>
+  </PropertyGroup>
+</Project>

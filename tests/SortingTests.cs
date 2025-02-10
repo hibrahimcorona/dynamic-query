@@ -1,8 +1,9 @@
-﻿using DynamicLibrary.Exceptions;
-using DynamicLibrary.Models;
+﻿using AltairOps.DynamicLibrary.Enums;
+using AltairOps.DynamicLibrary.Exceptions;
+using AltairOps.DynamicLibrary.Models;
 using DynamicLibrary.Tests.Entity;
 
-namespace DynamicLibrary.Tests;
+namespace AltairOps.DynamicLibrary.Tests;
 public class SortingTests
 {
 	[Fact]
@@ -12,7 +13,7 @@ public class SortingTests
 		IQueryable<TestEntity> query = TestEntity.EntityList.AsQueryable();
 
 		// Act
-		query = query.ApplySort(a => a.Age, Enums.SortingDirection.Ascending);
+		query = query.ApplySort(a => a.Age, SortingDirection.Ascending);
 		var newlist = query.ToList();
 		var expected = TestEntity.EntityList.OrderBy(a => a.Age).ToList();
 		// Assert
@@ -26,7 +27,7 @@ public class SortingTests
 		IQueryable<TestEntity> query = TestEntity.EntityList.AsQueryable();
 
 		// Act
-		query = query.ApplySort(a => a.Name, Enums.SortingDirection.Ascending);
+		query = query.ApplySort(a => a.Name, SortingDirection.Ascending);
 		var newlist = query.ToList();
 		var expected = TestEntity.EntityList.OrderBy(a => a.Name).ToList();
 
@@ -122,7 +123,7 @@ public class SortingTests
 		var model = new OrderByModel<TestEntity>
 		{
 			Field = "Age",
-			SortingDirection = Enums.SortingDirection.Descending
+			SortingDirection = SortingDirection.Descending
 		};
 
 		// Arrange

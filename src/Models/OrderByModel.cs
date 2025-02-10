@@ -1,7 +1,7 @@
-﻿using DynamicLibrary.Enums;
+﻿using AltairOps.DynamicLibrary.Enums;
 using System.Linq.Expressions;
 
-namespace DynamicLibrary.Models;
+namespace AltairOps.DynamicLibrary.Models;
 /// <summary>
 /// Represents a model for ordering by a field or using a string
 /// </summary>

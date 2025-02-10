@@ -1,4 +1,4 @@
-﻿namespace DynamicLibrary.Models;
+﻿namespace AltairOps.DynamicLibrary.Models;
 /// <summary>
 /// Represents a response for a query containing data and total count.
 /// </summary>
